@@ -1,30 +1,40 @@
 import javax.swing.*;
+import java.awt.event.*;
 
 public class GUI {
     final int APP_X_SIZE = 1000;
     final int APP_Y_SIZE = 1000;
-    JFrame frame;
-    JButton submitButton;
-    JTextField filePath;
-    JTextField output;
+    JFrame frame = new JFrame();
+    JButton submitButton = new JButton("Submit");
+    JTextField inputFilePath = new JTextField("Input file path...");
+    JTextField output = new JTextField("N/A");
 
+    /* Initializes the application with:
+     *  - Input field (Takes file path)
+     *  - Submit button (Empties the input field)
+     *  - Non-editable output box (Displays file bin)
+     */
     GUI() {
-       frame = new JFrame();
-       submitButton = new JButton("Submit");
-       filePath = new JTextField("Input file path...");
-       output = new JTextField("N/A");
+       inputFilePath.setEditable(true);
+       inputFilePath.setBounds(20, 20, 220, 50);
 
-       filePath.setEditable(true);
-       filePath.setBounds(20, 20, 220, 50);
        output.setEditable(false);
        output.setBounds(APP_X_SIZE / 4, APP_Y_SIZE / 4, 500, 500);
+
        submitButton.setBounds(20, 70, 220, 50);
+       submitButton.addActionListener(new ActionListener() {
+           @Override
+            public void actionPerformed(ActionEvent e) {
+                output.setText("This works!");
+                inputFilePath.setText("Input file path...");
+            }
+       });
 
        frame.setSize(APP_X_SIZE, APP_Y_SIZE);
        frame.setLayout(null);
        frame.setVisible(true);
        frame.add(submitButton);
-       frame.add(filePath);
+       frame.add(inputFilePath);
        frame.add(output);
    }
 }
