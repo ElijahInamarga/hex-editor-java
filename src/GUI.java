@@ -12,7 +12,7 @@ public class GUI {
     /* Initializes the application with:
      *  - Input field (Takes file path)
      *  - Non-editable output box (Displays file bin)
-     *  - Submit button (Empties the input field)
+     *  - Submit button (Takes and empties the input field)
      */
     GUI() {
        inputFilePath.setEditable(true);
@@ -22,13 +22,7 @@ public class GUI {
        output.setBounds(APP_X_SIZE / 4, APP_Y_SIZE / 4, 500, 500);
 
        submitButton.setBounds(20, 70, 220, 50);
-       submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                output.setText("This works!");
-                inputFilePath.setText("Input file path...");
-            }
-       });
+       submitButton.addActionListener(ON_CLICK);
 
        frame.setSize(APP_X_SIZE, APP_Y_SIZE);
        frame.setLayout(null);
@@ -37,4 +31,12 @@ public class GUI {
        frame.add(output);
        frame.add(submitButton);
    }
+
+   final ActionListener ON_CLICK = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            output.setText("This works!");
+            inputFilePath.setText("Input file path...");
+        }
+    };
 }
