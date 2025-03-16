@@ -1,42 +1,56 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class GUI {
-    final int APP_X_SIZE = 1000;
-    final int APP_Y_SIZE = 1000;
-    JFrame frame = new JFrame();
+    final int WIDTH = 1000;
+    final int HEIGHT = 800;
+    JFrame frame = new JFrame("Hex Editor");
     JButton submitButton = new JButton("Submit");
-    JTextField inputFilePath = new JTextField("Input file path...");
-    JTextField output = new JTextField("N/A");
+    JTextField inputFilePath = new JTextField("Input file path here...");
+    JTextArea outputArea = new JTextArea();
+    JScrollPane outputScrollPane = new JScrollPane(outputArea);
+    FileManager manager;
+    byte[] fileData;
+    final int BYTES_PER_LINE = 50; // Max bytes per line in output text box
 
-    /* Initializes the application with:
-     *  - Input field (Takes file path)
-     *  - Non-editable output box (Displays file bin)
-     *  - Submit button (Takes and empties the input field)
-     */
     GUI() {
-       inputFilePath.setEditable(true);
-       inputFilePath.setBounds(20, 20, 220, 50);
+        inputFilePath.setEditable(true);
+        outputArea.setEditable(false);
+        submitButton.addActionListener(ON_CLICK);
+        frame.setSize(WIDTH, HEIGHT);
+        frame.setLayout(new BorderLayout());
 
-       output.setEditable(false);
-       output.setBounds(APP_X_SIZE / 4, APP_Y_SIZE / 4, 500, 500);
+        JPanel inputPanel = new JPanel(new BorderLayout());
+        inputPanel.add(inputFilePath, BorderLayout.CENTER);
+        inputPanel.add(submitButton, BorderLayout.EAST);
 
-       submitButton.setBounds(20, 70, 220, 50);
-       submitButton.addActionListener(ON_CLICK);
+        frame.add(inputPanel, BorderLayout.NORTH);
+        frame.add(outputScrollPane, BorderLayout.CENTER);
 
-       frame.setSize(APP_X_SIZE, APP_Y_SIZE);
-       frame.setLayout(null);
-       frame.setVisible(true);
-       frame.add(inputFilePath);
-       frame.add(output);
-       frame.add(submitButton);
-   }
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 
-   final ActionListener ON_CLICK = new ActionListener() {
+    final ActionListener ON_CLICK = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            output.setText("This works!");
-            inputFilePath.setText("Input file path...");
+            manager = new FileManager(inputFilePath.getText());
+
+            if (manager.isFileExist() && manager.isReadableFile() && manager.isWritableFile()) {
+                fileData = manager.getFileData();
+                StringBuilder hexString = new StringBuilder();
+                for (int i = 0; i < fileData.length; i++) {
+                    hexString.append(String.format("%02X", fileData[i])).append(" ");
+
+                    // Prevent string overflow in output text box
+                    if ((i + 1) % BYTES_PER_LINE == 0) {
+                        hexString.append("\n");
+                    }
+                }
+                outputArea.setText(hexString.toString().trim());
+                inputFilePath.setText("Input file path..."); // Reset input
+            }
         }
     };
 }
