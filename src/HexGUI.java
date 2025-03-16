@@ -17,7 +17,11 @@ public class HexGUI extends JFrame implements ActionListener {
     JTextArea viewArea;
 
 
-
+    /**
+     * This constuctor initializes the HexGui frame and adds
+     * all of its graphical components (panels)
+     *
+     */
     public HexGUI(){
 
         setSize(1000,1000);
@@ -33,6 +37,17 @@ public class HexGUI extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * This panel is designated for the file section
+     * of the frame.
+     * It includes a saveButton where we'll add the save
+     * mechanism of our program
+     * It also includes a openFileButton where we'll add
+     * the function to open a file and run it through
+     * our program (A filePath will be requested).
+     * We will need a text box added to this panel for the
+     * file path input
+     */
     public void setFilePanel(){
 
         filePanel = new JPanel();
@@ -58,6 +73,13 @@ public class HexGUI extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * This is the panel designated for the hexcode of a
+     * file's binary
+     * It can be scrolled when text overflows
+     *
+     */
+
     public void setHexPanel(){
 
         hexPanel = new JPanel();
@@ -78,6 +100,10 @@ public class HexGUI extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * this panel is for the when a user wants to view the
+     * file's hex code in a certain code
+     */
     public void setViewPanel(){
 
         viewArea = new JTextArea("viewArea");
@@ -91,6 +117,10 @@ public class HexGUI extends JFrame implements ActionListener {
         add(viewScroll, BorderLayout.SOUTH);
     }
 
+    /**
+     * None of the buttons are connected to any action processing yet
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e){
 
