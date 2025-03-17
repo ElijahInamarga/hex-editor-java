@@ -1,6 +1,6 @@
 public class ConversionsTemp {
     public static String byteToHex(byte b) {
-        return String.format("%02x", b);
+        return String.format("%02X", b);
     }
 
     public static int hexToByte(String hexString) {

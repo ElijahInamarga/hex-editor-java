@@ -10,8 +10,8 @@ public class Main {
 //            System.out.println("Error");
 //        }
 
-        //GUI application = new GUI();
+        GUI application = new GUI();
 
-        HexGUI app = new HexGUI();
+//        HexGUI app = new HexGUI();
     }
 }
