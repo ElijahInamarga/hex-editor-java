@@ -11,7 +11,6 @@ public class Main {
 //        }
 
         GUI application = new GUI();
-
 //        HexGUI app = new HexGUI();
     }
 }
