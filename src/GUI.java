@@ -78,7 +78,6 @@ public class GUI {
                     }
                 }
                 outputArea.setText(hexString.toString().trim());
-                inputFilePath.setText("Input file path..."); // Reset input
             }
         }
     };
