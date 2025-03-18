@@ -7,23 +7,28 @@ public class GUI {
     final int HEIGHT = 840;
     JFrame frame = new JFrame("Hex Editor");
     JButton submitButton = new JButton("Submit");
+    JButton findFileButton = new JButton("Find File");
     JTextField inputFilePath = new JTextField("Input file path here...");
     JTextArea outputArea = new JTextArea();
     JScrollPane outputScrollPane = new JScrollPane(outputArea);
     FileManager manager;
+    JFileChooser fileChooser = new JFileChooser();
     byte[] fileData;
     final int BYTES_PER_LINE = 50; // Max bytes per line in output text box
 
     GUI() {
         inputFilePath.setEditable(true);
         outputArea.setEditable(false);
-        submitButton.addActionListener(ON_CLICK);
+        submitButton.addActionListener(ON_SUBMIT);
+        findFileButton.addActionListener(ON_FIND_FILE);
         frame.setSize(WIDTH, HEIGHT);
         frame.setLayout(new BorderLayout());
 
         JPanel inputPanel = new JPanel(new BorderLayout());
+
         inputPanel.add(inputFilePath, BorderLayout.CENTER);
         inputPanel.add(submitButton, BorderLayout.EAST);
+        inputPanel.add(findFileButton, BorderLayout.WEST);
 
         frame.add(inputPanel, BorderLayout.NORTH);
         frame.add(outputScrollPane, BorderLayout.CENTER);
@@ -32,7 +37,31 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    final ActionListener ON_CLICK = new ActionListener() {
+    /*
+     * Opens a file explorer for the user
+     * Allows user to choose a file
+     * Sets inputFilePath text as the file path the user saves
+     */
+    final ActionListener ON_FIND_FILE = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            final int returnVal = fileChooser.showOpenDialog(frame);
+
+            // When user clicks on "save", set inputFilePath text as file path
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                final String FILE_PATH = fileChooser.getSelectedFile().getAbsolutePath();
+                inputFilePath.setText(FILE_PATH);
+            }
+        }
+    };
+
+    /*
+    * Takes text from inputFilePath
+    * Passes inputFilePath into FileManager
+    * Translates result from FileManager into hex
+    * Displays translated result
+     */
+    final ActionListener ON_SUBMIT = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             manager = new FileManager(inputFilePath.getText());
