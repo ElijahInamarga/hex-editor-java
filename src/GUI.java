@@ -3,8 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GUI {
-    final int WIDTH = 1020;
-    final int HEIGHT = 840;
+    final int WIDTH = 1100;
+    final int HEIGHT = 900;
     JFrame frame = new JFrame("Hex Editor");
     JButton submitButton = new JButton("Submit");
     JButton findFileButton = new JButton("Find File");
@@ -48,7 +48,7 @@ public class GUI {
             final int returnVal = fileChooser.showOpenDialog(frame);
 
             // When user clicks on "save", set inputFilePath text as file path
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
                 final String FILE_PATH = fileChooser.getSelectedFile().getAbsolutePath();
                 inputFilePath.setText(FILE_PATH);
             }
@@ -66,14 +66,14 @@ public class GUI {
         public void actionPerformed(ActionEvent e) {
             manager = new FileManager(inputFilePath.getText());
 
-            if (manager.isFileExist() && manager.isReadableFile() && manager.isWritableFile()) {
+            if(manager.isFileExist() && manager.isReadableFile() && manager.isWritableFile()) {
                 fileData = manager.getFileData();
                 StringBuilder hexString = new StringBuilder();
-                for (int i = 0; i < fileData.length; i++) {
+                for(int i = 0; i < fileData.length; i++) {
                     hexString.append(ConversionsTemp.byteToHex(fileData[i])).append(" ");
 
                     // Prevent string overflow in output text box
-                    if ((i + 1) % BYTES_PER_LINE == 0) {
+                    if((i + 1) % BYTES_PER_LINE == 0) {
                         hexString.append("\n");
                     }
                 }
