@@ -6,10 +6,12 @@ import java.awt.event.ActionListener;
 
 public class HexGUI extends JFrame implements ActionListener {
 
-    JPanel filePanel;
-    JLabel fileLabel;
+    JButton fileButton;
     JButton saveButton;
     JButton openFileButton;
+    JLabel textLabel;
+    JTextField pathInputField;
+    JButton enterButton;
 
     JPanel hexPanel;
     JTextArea hexCode;
@@ -32,7 +34,6 @@ public class HexGUI extends JFrame implements ActionListener {
         setFilePanel();
         setHexPanel();
         setViewPanel();
-
         setVisible(true);
 
     }
@@ -50,27 +51,50 @@ public class HexGUI extends JFrame implements ActionListener {
      */
     public void setFilePanel(){
 
-        filePanel = new JPanel();
-        filePanel.setBorder(BorderFactory.createLineBorder(Color.darkGray,5));
+        JPanel filePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Dimension fieldSize = new Dimension(200,40);
+        filePanel.setPreferredSize(fieldSize);
 
-        fileLabel = new JLabel("File");
-        fileLabel.setBorder(BorderFactory.createLineBorder(Color.darkGray,1));
+        fileButton = new JButton(" File ");
+        fileButton.setBorder(BorderFactory.createLineBorder(Color.darkGray,1));
+        fileButton.addActionListener(this);
 
-        saveButton = new JButton("Save");
+        saveButton = new JButton(" Save ");
         saveButton.setBorder(BorderFactory.createLineBorder(Color.darkGray,1));
         saveButton.addActionListener(this);
+        saveButton.setVisible(false);
 
-        openFileButton = new JButton("Open");
+        openFileButton = new JButton(" Open ");
         openFileButton.setBorder(BorderFactory.createLineBorder(Color.darkGray,1));
         openFileButton.addActionListener(this);
+        openFileButton.setVisible(false);
 
-        filePanel.add(fileLabel);
+        filePanel.add(fileButton);
         filePanel.add(saveButton);
         filePanel.add(openFileButton);
 
-        add(filePanel,BorderLayout.WEST);
+        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        textLabel = new JLabel("FilePath:");
+        textLabel.setVisible(false);
+        pathInputField = new JTextField();
+        pathInputField.setBorder(BorderFactory.createLineBorder(Color.darkGray,1));
+        fieldSize = new Dimension(500,25);
+        pathInputField.setPreferredSize(fieldSize);
+        pathInputField.setVisible(false);
+        enterButton = new JButton(" Enter ");
+        enterButton.setVisible(false);
+        enterButton.addActionListener(this);
+        enterButton.setBorder(BorderFactory.createLineBorder(Color.darkGray,1));
+        userPanel.add(textLabel);
+        userPanel.add(pathInputField);
+        userPanel.add(enterButton);
 
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBorder(BorderFactory.createLineBorder(Color.darkGray,5));
+        topPanel.add(filePanel, BorderLayout.WEST);
+        topPanel.add(userPanel);
 
+        add(topPanel,BorderLayout.NORTH);
     }
 
     /**
@@ -91,13 +115,12 @@ public class HexGUI extends JFrame implements ActionListener {
 
 
         JScrollPane hexScroll = new JScrollPane(hexCode);
-        Dimension hexSize = new Dimension(800,700);
+        Dimension hexSize = new Dimension(800,650);
         hexScroll.setPreferredSize(hexSize);
 
         hexPanel.add(hexScroll);
 
         add(hexPanel,BorderLayout.CENTER);
-
     }
 
     /**
@@ -107,8 +130,9 @@ public class HexGUI extends JFrame implements ActionListener {
     public void setViewPanel(){
 
         viewArea = new JTextArea("viewArea");
-        viewArea.setBorder(BorderFactory.createLineBorder(Color.darkGray,1));
+
         viewArea.setLineWrap(true);
+        viewArea.setEditable(false);
 
         JScrollPane viewScroll = new JScrollPane(viewArea);
         Dimension hexSize = new Dimension(0,50);
@@ -118,11 +142,51 @@ public class HexGUI extends JFrame implements ActionListener {
     }
 
     /**
-     * None of the buttons are connected to any action processing yet
+     *
      * @param e the event to be processed
      */
     @Override
     public void actionPerformed(ActionEvent e){
+
+        //this action is performed when the file button is pressed.
+        // the save and open buttons become available
+        if(e.getSource() == fileButton){
+
+            saveButton.setVisible(!saveButton.isVisible());
+            openFileButton.setVisible(!openFileButton.isVisible());
+            pathInputField.setVisible(false);
+            textLabel.setVisible(false);
+            enterButton.setVisible(false);
+
+        }
+        // this action is performed when the open button is pressed
+        // the file path input window appears
+        else if(e.getSource() == openFileButton){
+            openFileButton.setVisible(false);
+            saveButton.setVisible(false);
+
+            textLabel.setVisible(!textLabel.isVisible());
+            pathInputField.setVisible(!pathInputField.isVisible());
+            enterButton.setVisible(!enterButton.isVisible());
+
+        }
+        //this action is performed when the save button is pressed
+        // we need to implement a save function here
+        else if(e.getSource() == saveButton) {
+            openFileButton.setVisible(false);
+            saveButton.setVisible(false);
+        }
+
+        // this action is performed when the path enter button is pressed.
+        // We should attach our FileManager function here
+        else if(e.getSource() == enterButton){
+            String text = pathInputField.getText();
+            hexCode.setText(text);
+            textLabel.setVisible(false);
+            pathInputField.setText("");
+            pathInputField.setVisible(false);
+            enterButton.setVisible(false);
+        }
 
     }
 
