@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.StringBuilder;
 
 public class HexGUI extends JFrame implements ActionListener {
 
@@ -33,7 +34,7 @@ public class HexGUI extends JFrame implements ActionListener {
 
         setFilePanel();
         setHexPanel();
-        setViewPanel();
+        //setViewPanel();
         setVisible(true);
 
     }
@@ -178,10 +179,19 @@ public class HexGUI extends JFrame implements ActionListener {
         }
 
         // this action is performed when the path enter button is pressed.
-        // We should attach our FileManager function here
+        // A FileManager is created and a file's data is displayed
         else if(e.getSource() == enterButton){
             String text = pathInputField.getText();
-            hexCode.setText(text);
+
+            FileManager manager = new FileManager(text);
+            StringBuilder hexString = new StringBuilder();
+            if (manager.isFileExist() && manager.isReadableFile() && manager.isWritableFile()) {
+                byte[] fileData = manager.getFileData();
+                for (int i = 0; i < fileData.length; i++) {
+                    hexString.append(ConversionsTemp.byteToHex(fileData[i])).append(" ");
+                    }
+                }
+            hexCode.setText(hexString.toString());
             textLabel.setVisible(false);
             pathInputField.setText("");
             pathInputField.setVisible(false);
