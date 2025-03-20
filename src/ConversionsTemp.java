@@ -7,3 +7,5 @@ public class ConversionsTemp {
         return (byte) Integer.parseInt(hexString, 16);
     }
 }
+
+
