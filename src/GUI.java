@@ -72,7 +72,7 @@ public class GUI {
                 byte[] fileData = manager.getFileData();
                 StringBuilder hexString = new StringBuilder();
                 for (int i = 0; i < fileData.length; i++) {
-                    hexString.append(String.format("%02X", fileData[i])).append(" ");
+                    hexString.append(ConversionsTemp.byteToHex(fileData[i])).append(" ");
 
                     // Prevent string overflow in output text box
                     if ((i + 1) % BYTES_PER_LINE == 0) {
