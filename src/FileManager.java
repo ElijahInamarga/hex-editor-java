@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -25,23 +26,24 @@ public class FileManager {
 
     // Init file path for the File manager
     FileManager(String filePath) {
-        setFilePath(filePath);
+        setNewFilePath(filePath);
     }
 
     // sets the desired file path
-    void setFilePath(String filePath){
+    public void setNewFilePath(String filePath){
         this.filePath = filePath;
         this.mainFile = new File(filePath);
 
         this.fileExists = mainFile.exists();
         this.isReadableFile = mainFile.canRead();
         this.isWritableFile = mainFile.canWrite();
+        getFileData();
     }
 
     // isFileExists, isReadableFile, and isWritableFile should be checked BEFORE this is called to prevent an error
     public byte[] getFileData() {
         try {
-            this.setFileData();
+            this.readFileData();
             return this.mainFileData;
         } catch (IOException e) {
             System.out.println("There was an error reading the selected file. It may not exist or this program may not have permissions to open it.");
@@ -51,9 +53,35 @@ public class FileManager {
         return new byte[0];
     }
 
-
-    private void setFileData() throws IOException, InvalidPathException {
+    private void readFileData() throws IOException, InvalidPathException {
         mainFileData = Files.readAllBytes(mainFile.toPath());
+    }
+
+    // check requirements for getFileData() before using
+    public String[] getFileDataHex() {
+        byte[] fileData = getFileData();
+        String[] hexFileData = new String[fileData.length];
+
+        for (int i = 0; i < fileData.length; i++) {
+            hexFileData[i] = ConversionsTemp.byteToHex(fileData[i]);
+        }
+
+        return hexFileData;
+    }
+
+
+    public void writeFileData() {
+        try {
+            FileOutputStream writeFile = new FileOutputStream(this.getFilePath());
+            writeFile.write(this.mainFileData);
+
+        } catch (IOException e) {
+            System.out.println("Problem :(");
+        }
+    }
+
+    public void unprotectedModifyByte(int index, byte newByte) {
+        this.mainFileData[index] = newByte;
     }
 
     public boolean isFileExist() {
@@ -71,4 +99,5 @@ public class FileManager {
     public String getFilePath() {
         return this.filePath;
     }
+
 }
