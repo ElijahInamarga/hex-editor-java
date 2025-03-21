@@ -70,13 +70,14 @@ public class FileManager {
     }
 
 
-    public void writeFileData() {
+    public void writeFileData() throws IOException {
         try {
             FileOutputStream writeFile = new FileOutputStream(this.getFilePath());
             writeFile.write(this.mainFileData);
 
         } catch (IOException e) {
             System.out.println("Problem :(");
+            throw e;
         }
     }
 
