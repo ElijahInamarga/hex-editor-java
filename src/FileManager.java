@@ -25,12 +25,12 @@ public class FileManager {
     private boolean isWritableFile;
 
     // Init file path for the File manager
-    FileManager(String filePath) {
+    FileManager(String filePath) throws IOException, InvalidPathException {
         setNewFilePath(filePath);
     }
 
     // sets the desired file path
-    public void setNewFilePath(String filePath){
+    public void setNewFilePath(String filePath) throws IOException, InvalidPathException{
         this.filePath = filePath;
         this.mainFile = new File(filePath);
 
@@ -41,16 +41,9 @@ public class FileManager {
     }
 
     // isFileExists, isReadableFile, and isWritableFile should be checked BEFORE this is called to prevent an error
-    public byte[] getFileData() {
-        try {
-            this.readFileData();
-            return this.mainFileData;
-        } catch (IOException e) {
-            System.out.println("There was an error reading the selected file. It may not exist or this program may not have permissions to open it.");
-        } catch (InvalidPathException e) {
-            System.out.println("There was an error reading the selected file. It likely does not exist at the specified file path");
-        }
-        return new byte[0];
+    public byte[] getFileData() throws IOException, InvalidPathException {
+        this.readFileData();
+        return this.mainFileData;
     }
 
     private void readFileData() throws IOException, InvalidPathException {
@@ -58,7 +51,7 @@ public class FileManager {
     }
 
     // check requirements for getFileData() before using
-    public String[] getFileDataHex() {
+    public String[] getFileDataHex() throws IOException, InvalidPathException {
         byte[] fileData = getFileData();
         String[] hexFileData = new String[fileData.length];
 
