@@ -105,7 +105,7 @@ public class GUI {
                     outputArea.setText(hexString.toString());
                 }
             } catch(IOException | InvalidPathException ex) {
-                JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage() + "not found", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
         }
