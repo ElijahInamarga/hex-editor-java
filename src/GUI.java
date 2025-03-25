@@ -37,22 +37,23 @@ public class GUI {
         inputPanel.add(findFileButton, BorderLayout.WEST);
 
         // Clicking on the file path input text box auto selects the whole input field
-//        inputFilePath.addFocusListener(new FocusAdapter() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                inputFilePath.setSelectionColor(Color.ORANGE);
-//                inputFilePath.selectAll();
-//            }
-//        });
-
-        //clicking on file path input text box auto deletes everything in the input field.
         inputFilePath.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                // Clear text only if it hasn't already been cleared
-                if (!inputFilePath.getText().isEmpty()) {
-                    inputFilePath.setText("");
+                inputFilePath.setSelectionColor(Color.ORANGE);
+                inputFilePath.selectAll();
+            }
+        });
+
+        //automatically replaces instruction in inputFilePath text box if the field is empty
+        inputFilePath.addFocusListener(new FocusAdapter(){
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (inputFilePath.getText().isEmpty()) {
+                    inputFilePath.setText("Input file path here...");
                 }
+            }
+        });
 
         frame.add(inputPanel, BorderLayout.NORTH);
         frame.add(outputPanel, BorderLayout.CENTER);
