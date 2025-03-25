@@ -1,8 +1,9 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.nio.file.InvalidPathException;
 
 public class GUI {
     private final int WIDTH = 1065;
@@ -67,20 +68,25 @@ public class GUI {
     private final ActionListener ON_SUBMIT = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            FileManager manager = new FileManager(inputFilePath.getText());
-            if (manager.isFileExist() && manager.isReadableFile() && manager.isWritableFile()) {
-                byte[] fileData = manager.getFileData();
-                StringBuilder hexString = new StringBuilder();
-                for (int i = 0; i < fileData.length; i++) {
-                    hexString.append(ConversionsTemp.byteToHex(fileData[i])).append(" ");
+            try {
+                FileManager manager = new FileManager(inputFilePath.getText());
+                if (manager.isFileExist() && manager.isReadableFile() && manager.isWritableFile()) {
+                    byte[] fileData = manager.getFileData();
+                    StringBuilder hexString = new StringBuilder();
+                    for (int i = 0; i < fileData.length; i++) {
+                        hexString.append(ConversionsTemp.byteToHex(fileData[i])).append(" ");
 
-                    // Prevent string overflow in output text box
-                    if ((i + 1) % BYTES_PER_LINE == 0) {
-                        hexString.append("\n");
+                        // Prevent string overflow in output text box
+                        if ((i + 1) % BYTES_PER_LINE == 0) {
+                            hexString.append("\n");
+                        }
                     }
+                    outputArea.setText(hexString.toString());
                 }
-                outputArea.setText(hexString.toString());
+            } catch(IOException | InvalidPathException ex) {
+                JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+
         }
     };
 }
