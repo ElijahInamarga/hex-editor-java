@@ -1,3 +1,4 @@
+//misc static sh- stuff
 public class ConversionsTemp {
     public static String byteToHex(byte b) {
         return String.format("%02X", b);
