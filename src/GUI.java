@@ -57,6 +57,8 @@ public class GUI {
             }
         });
 
+        frame.getRootPane().setDefaultButton(submitButton);
+
         frame.add(inputPanel, BorderLayout.NORTH);
         frame.add(outputPanel, BorderLayout.CENTER);
 
