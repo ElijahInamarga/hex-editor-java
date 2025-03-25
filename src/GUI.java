@@ -36,12 +36,12 @@ public class GUI {
         inputPanel.add(submitButton, BorderLayout.EAST);
         inputPanel.add(findFileButton, BorderLayout.WEST);
 
-        // Clicking on the file path input text box auto selects the whole input field
+        // Clicking on the file path input text box auto deletes the whole input field if it's the instruction text
         inputFilePath.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                inputFilePath.setSelectionColor(Color.ORANGE);
-                inputFilePath.selectAll();
+                if (inputFilePath.getText().equals("Input file path here..."))
+                inputFilePath.setText("");
             }
         });
 
