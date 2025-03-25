@@ -40,6 +40,7 @@ public class GUI {
         inputFilePath.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
+                inputFilePath.setSelectionColor(Color.ORANGE);
                 inputFilePath.selectAll();
             }
         });
