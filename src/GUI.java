@@ -36,23 +36,12 @@ public class GUI {
         inputPanel.add(submitButton, BorderLayout.EAST);
         inputPanel.add(findFileButton, BorderLayout.WEST);
 
-        /*
-        * Clicking on the file path input text box auto selects the whole input field
-        * Leaving the input empty brings back previous entry
-         */
+        // Clicking on the file path input text box auto selects the whole input field
         inputFilePath.addFocusListener(new FocusAdapter() {
-            String prevString = inputFilePath.getText();
             @Override
             public void focusGained(FocusEvent e) {
                 inputFilePath.setSelectionColor(Color.ORANGE);
                 inputFilePath.selectAll();
-                prevString = inputFilePath.getText();
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if(inputFilePath.getText().isEmpty())
-                    inputFilePath.setText(prevString);
             }
         });
 
@@ -67,7 +56,7 @@ public class GUI {
      * Opens a file explorer for the user
      * Allows user to choose a file
      * Sets inputFilePath text as the file path the user saves
-      */
+     */
     private final ActionListener ON_FIND_FILE = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -84,7 +73,7 @@ public class GUI {
      * Passes inputFilePath into FileManager
      * Translates result from FileManager into hex
      * Displays translated result
-      */
+     */
     private final ActionListener ON_SUBMIT = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
