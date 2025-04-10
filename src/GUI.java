@@ -58,10 +58,8 @@ public class GUI {
         });
 
         frame.getRootPane().setDefaultButton(submitButton);
-
         frame.add(inputPanel, BorderLayout.NORTH);
         frame.add(outputPanel, BorderLayout.CENTER);
-
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
