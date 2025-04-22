@@ -3,6 +3,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 
 /* HOW TO USE:
@@ -19,7 +22,7 @@ Otherwise, if there is an error a blank byte[] will be returned with an issue pr
 public class FileManager {
     private String filePath;
     private File mainFile;
-    private byte[] mainFileData;
+    private ArrayList<Byte> mainFileData;
     private boolean fileExists;
     private boolean isReadableFile;
     private boolean isWritableFile;
@@ -29,7 +32,7 @@ public class FileManager {
         setNewFilePath(filePath);
     }
 
-    // sets the desired file path
+    // sets the desired file path and updates everywhere
     public void setNewFilePath(String filePath) throws IOException, InvalidPathException{
         this.filePath = filePath;
         this.mainFile = new File(filePath);
@@ -37,26 +40,24 @@ public class FileManager {
         this.fileExists = mainFile.exists();
         this.isReadableFile = mainFile.canRead();
         this.isWritableFile = mainFile.canWrite();
-        getFileData();
+        readFileData();
     }
 
-    // isFileExists, isReadableFile, and isWritableFile should be checked BEFORE this is called to prevent an error
-    public byte[] getFileData() throws IOException, InvalidPathException {
-        this.readFileData();
+    public ArrayList<Byte> getFileData() {
         return this.mainFileData;
     }
 
     private void readFileData() throws IOException, InvalidPathException {
-        mainFileData = Files.readAllBytes(mainFile.toPath());
+        byte[] fileData = Files.readAllBytes(mainFile.toPath());
+        this.mainFileData = getArrayList(fileData);
     }
 
-    // check requirements for getFileData() before using
     public String[] getFileDataHex() throws IOException, InvalidPathException {
-        byte[] fileData = getFileData();
-        String[] hexFileData = new String[fileData.length];
+        ArrayList<Byte> fileData = getFileData();
+        String[] hexFileData = new String[fileData.size()];
 
-        for (int i = 0; i < fileData.length; i++) {
-            hexFileData[i] = ConversionsTemp.byteToHex(fileData[i]);
+        for (int i = 0; i < fileData.size(); i++) {
+            hexFileData[i] = ConversionsTemp.byteToHex(fileData.get(i));
         }
 
         return hexFileData;
@@ -66,7 +67,13 @@ public class FileManager {
     public void writeFileData() throws IOException {
         try {
             FileOutputStream writeFile = new FileOutputStream(this.getFilePath());
-            writeFile.write(this.mainFileData);
+            byte[] writeArray = new byte[this.mainFileData.size()];
+
+            for (int i = 0; i < this.mainFileData.size(); i++) {
+                writeArray[i] = this.mainFileData.get(i);
+            }
+
+            writeFile.write(writeArray);
 
         } catch (IOException e) {
             System.out.println("Problem :(");
@@ -74,8 +81,14 @@ public class FileManager {
         }
     }
 
-    public void unprotectedModifyByte(int index, byte newByte) {
-        this.mainFileData[index] = newByte;
+    // O(1)
+    public void modifyByte(int index, byte newByte) throws ArrayIndexOutOfBoundsException {
+         this.mainFileData.set(index, newByte);
+    }
+
+    // O(n)
+    public void insertByte(int index, byte newByte) throws ArrayIndexOutOfBoundsException {
+
     }
 
     public boolean isFileExist() {
@@ -92,6 +105,14 @@ public class FileManager {
 
     public String getFilePath() {
         return this.filePath;
+    }
+
+    private ArrayList<Byte> getArrayList(byte[] arr) {
+        ArrayList<Byte> arrayList = new ArrayList<Byte>();
+        for (int i = 0; i < arr.length; i++) {
+            arrayList.addLast(arr[i]);
+        }
+        return arrayList;
     }
 
 }
