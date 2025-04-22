@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
+import java.util.ArrayList;
 
 public class GUI {
     private final int WIDTH = 1065;
@@ -96,10 +97,10 @@ public class GUI {
             try {
                 FileManager manager = new FileManager(inputFilePath.getText());
                 if (manager.isFileExist() && manager.isReadableFile() && manager.isWritableFile()) {
-                    byte[] fileData = manager.getFileData();
+                    ArrayList<Byte> fileData = manager.getFileData();
                     StringBuilder hexString = new StringBuilder();
-                    for (int i = 0; i < fileData.length; i++) {
-                        hexString.append(ConversionsTemp.byteToHex(fileData[i])).append(" ");
+                    for (int i = 0; i < fileData.size(); i++) {
+                        hexString.append(ConversionsTemp.byteToHex(fileData.get(i))).append(" ");
 
                         // Prevent string overflow in output text box
                         if ((i + 1) % BYTES_PER_LINE == 0) {
