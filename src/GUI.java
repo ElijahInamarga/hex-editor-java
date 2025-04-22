@@ -15,9 +15,12 @@ public class GUI {
     private JButton submitButton = new JButton("Submit");
     private JButton findFileButton = new JButton("Find File");
     private JTextField inputFilePath = new JTextField("Input file path here...");
+    private JTextPane comments = new JTextPane();
     private JTextPane outputArea = new JTextPane();
     private JScrollPane outputScrollPane = new JScrollPane(outputArea);
     private JFileChooser fileChooser = new JFileChooser();
+
+
 
     GUI() {
         inputFilePath.setEditable(true);
@@ -30,6 +33,7 @@ public class GUI {
         JPanel outputPanel = new JPanel(new BorderLayout());
         outputPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
         outputPanel.add(outputScrollPane, BorderLayout.CENTER);
+
 
         JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(inputFilePath, BorderLayout.CENTER);
