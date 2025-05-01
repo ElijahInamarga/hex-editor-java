@@ -91,6 +91,18 @@ public class FileManager {
 
     }
 
+    // TEMPORARY
+    public void actuallyWriteFileData(byte[] newFileData) throws IOException {
+        try {
+            FileOutputStream writeFile = new FileOutputStream(this.getFilePath());
+            writeFile.write(newFileData);
+
+        } catch (IOException e) {
+            System.out.println("Problem :(");
+            throw e;
+        }
+    }
+
     public boolean isFileExist() {
         return fileExists;
     }

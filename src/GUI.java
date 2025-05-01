@@ -10,11 +10,13 @@ public class GUI {
     private final int WIDTH = 1065;
     private final int HEIGHT = 900;
     private final int BYTES_PER_LINE = 50; // Max bytes per line in output text box
+    private FileManager manager;
 
     // GUI Panels
     private JFrame frame = new JFrame("Hex Editor");
     private JButton submitButton = new JButton("Submit");
     private JButton findFileButton = new JButton("Find File");
+    private JButton saveButton = new JButton("Save File");
     private JTextField inputFilePath = new JTextField("Input file path here...");
     private JTextPane outputArea = new JTextPane();
     private JScrollPane outputScrollPane = new JScrollPane(outputArea);
@@ -24,9 +26,10 @@ public class GUI {
 
     GUI() {
         inputFilePath.setEditable(true);
-        outputArea.setEditable(false);
+        outputArea.setEditable(true);
         submitButton.addActionListener(ON_SUBMIT);
         findFileButton.addActionListener(ON_FIND_FILE);
+        saveButton.addActionListener(ON_SAVE_FILE);
         frame.setSize(WIDTH, HEIGHT);
         frame.setLayout(new BorderLayout());
 
@@ -37,6 +40,7 @@ public class GUI {
         JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(inputFilePath, BorderLayout.CENTER);
         inputPanel.add(submitButton, BorderLayout.EAST);
+        inputPanel.add(saveButton, BorderLayout.PAGE_END);
         inputPanel.add(findFileButton, BorderLayout.WEST);
 
         /*
@@ -101,7 +105,7 @@ public class GUI {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                FileManager manager = new FileManager(inputFilePath.getText());
+                manager = new FileManager(inputFilePath.getText());
                 if (manager.isFileExist() && manager.isReadableFile() && manager.isWritableFile()) {
                     ArrayList<Byte> fileData = manager.getFileData();
                     StringBuilder hexString = new StringBuilder();
@@ -117,6 +121,19 @@ public class GUI {
                 }
             } catch(IOException | InvalidPathException ex) {
                 JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage() + "not found", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    };
+
+    private final ActionListener ON_SAVE_FILE = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            byte[] fileData ;
+            String hexString = outputArea.getText().replaceAll("\\s+", "");
+            try {
+                manager.actuallyWriteFileData(ConversionsTemp.hexToByte(hexString));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
         }
     };
