@@ -64,7 +64,7 @@ public class FileManager {
     }
 
 
-    public void writeFileData() throws IOException {
+    public void saveFileData() throws IOException {
         try {
             FileOutputStream writeFile = new FileOutputStream(this.getFilePath());
             byte[] writeArray = new byte[this.mainFileData.size()];
@@ -86,9 +86,12 @@ public class FileManager {
          this.mainFileData.set(index, newByte);
     }
 
-    // O(n)
     public void insertByte(int index, byte newByte) throws ArrayIndexOutOfBoundsException {
+        this.mainFileData.add(index, newByte);
+    }
 
+    public void removeByte(int index) throws ArrayIndexOutOfBoundsException {
+        this.mainFileData.remove(index);
     }
 
     // TEMPORARY
