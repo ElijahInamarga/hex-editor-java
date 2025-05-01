@@ -47,9 +47,6 @@ public class GUI {
             String prevString;
             @Override
             public void focusGained(FocusEvent e) {
-                if(inputFilePath.getText().equals("Input file path here...")){
-                    inputFilePath.setText("");
-                }
                 inputFilePath.setSelectionColor(Color.ORANGE);
                 inputFilePath.selectAll();
                 prevString = inputFilePath.getText();
@@ -58,7 +55,12 @@ public class GUI {
             @Override
             public void focusLost(FocusEvent e) {
                 if(inputFilePath.getText().isEmpty()) {
-                    inputFilePath.setText(prevString);
+                    if(inputFilePath.getText().isEmpty()){
+                        inputFilePath.setText("Input file path here...");
+                    }
+                    else {
+                        inputFilePath.setText(prevString);
+                    }
                 }
             }
         });
