@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -32,6 +33,8 @@ public class GUI extends JFrame{
         saveButton.addActionListener(ON_SAVE_FILE);
         frame.setSize(WIDTH, HEIGHT);
         frame.setLayout(new BorderLayout());
+        CommentManager commentManager = new CommentManager(outputArea);
+        commentManager.installIconPainter();
 
         JPanel outputPanel = new JPanel(new BorderLayout());
         outputPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -42,6 +45,32 @@ public class GUI extends JFrame{
         inputPanel.add(submitButton, BorderLayout.EAST);
         inputPanel.add(saveButton, BorderLayout.PAGE_END);
         inputPanel.add(findFileButton, BorderLayout.WEST);
+
+        JPopupMenu menu = new JPopupMenu();
+        JMenuItem addCommentItem = new JMenuItem("Add Comment…");
+        menu.add(addCommentItem);
+        outputArea.setComponentPopupMenu(menu);
+        addCommentItem.addActionListener(e -> {
+            int start = outputArea.getSelectionStart();
+            int end = outputArea.getSelectionEnd();
+            if (start == end) return;
+            String selectedText;
+            try {
+                selectedText = outputArea.getDocument().getText(start, end - start);
+            } catch (BadLocationException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            String comment = JOptionPane.showInputDialog(
+                    outputArea,
+                    "Comment for:\n“" + selectedText + "”",
+                    "New Comment",
+                    JOptionPane.PLAIN_MESSAGE
+            );
+            if (comment != null && !comment.trim().isEmpty()) {
+                commentManager.addComment(start, end, comment.trim());
+            }
+        });
 
         /*
          * Clicking on the file path input text box auto selects the whole input field
