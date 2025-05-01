@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
 
-public class GUI {
+public class GUI extends JFrame{
     private final int WIDTH = 1065;
     private final int HEIGHT = 900;
     private final int BYTES_PER_LINE = 50; // Max bytes per line in output text box

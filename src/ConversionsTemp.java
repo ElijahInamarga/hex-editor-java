@@ -4,7 +4,7 @@ public class ConversionsTemp {
         return String.format("%02X", b);
     }
 
-    public static int hexToByte(String hexString) {
+    public static byte hexToByte(String hexString) {
         return (byte) Integer.parseInt(hexString, 16);
     }
 }
