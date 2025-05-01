@@ -112,7 +112,6 @@ public class GUI {
             } catch(IOException | InvalidPathException ex) {
                 JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage() + "not found", "Error", JOptionPane.ERROR_MESSAGE);
             }
-
         }
     };
 }
