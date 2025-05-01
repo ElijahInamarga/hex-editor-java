@@ -58,7 +58,7 @@ public class GUI {
             @Override
             public void focusLost(FocusEvent e) {
                 if(inputFilePath.getText().isEmpty()) {
-                    if(inputFilePath.getText().isEmpty()){
+                    if(prevString.isEmpty()){
                         inputFilePath.setText("Input file path here...");
                     }
                     else {
