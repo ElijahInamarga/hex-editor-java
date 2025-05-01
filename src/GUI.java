@@ -16,7 +16,6 @@ public class GUI {
     private JButton submitButton = new JButton("Submit");
     private JButton findFileButton = new JButton("Find File");
     private JTextField inputFilePath = new JTextField("Input file path here...");
-    private JTextPane comments = new JTextPane();
     private JTextPane outputArea = new JTextPane();
     private JScrollPane outputScrollPane = new JScrollPane(outputArea);
     private JFileChooser fileChooser = new JFileChooser();
@@ -35,7 +34,6 @@ public class GUI {
         outputPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
         outputPanel.add(outputScrollPane, BorderLayout.CENTER);
 
-
         JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(inputFilePath, BorderLayout.CENTER);
         inputPanel.add(submitButton, BorderLayout.EAST);
@@ -49,6 +47,9 @@ public class GUI {
             String prevString;
             @Override
             public void focusGained(FocusEvent e) {
+                if(inputFilePath.getText().equals("Input file path here...")){
+                    inputFilePath.setText("");
+                }
                 inputFilePath.setSelectionColor(Color.ORANGE);
                 inputFilePath.selectAll();
                 prevString = inputFilePath.getText();
@@ -57,7 +58,12 @@ public class GUI {
             @Override
             public void focusLost(FocusEvent e) {
                 if(inputFilePath.getText().isEmpty()) {
-                    inputFilePath.setText(prevString);
+                    if(prevString.isEmpty()){
+                        inputFilePath.setText("Input file path here...");
+                    }
+                    else {
+                        inputFilePath.setText(prevString);
+                    }
                 }
             }
         });
