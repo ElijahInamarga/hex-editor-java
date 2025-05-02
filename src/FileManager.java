@@ -125,7 +125,7 @@ public class FileManager {
     private ArrayList<Byte> getArrayList(byte[] arr) {
         ArrayList<Byte> arrayList = new ArrayList<Byte>();
         for (int i = 0; i < arr.length; i++) {
-            arrayList.addLast(arr[i]);
+            arrayList.add(arr[i]);
         }
         return arrayList;
     }
