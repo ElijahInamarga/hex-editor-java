@@ -32,6 +32,7 @@ public class GUI extends JFrame{
         super("Hex Editor");
         inputFilePath.setEditable(true);
         outputArea.setEditable(true);
+        outputArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         submitButton.addActionListener(ON_SUBMIT);
         findFileButton.addActionListener(ON_FIND_FILE);
         saveButton.addActionListener(ON_SAVE_FILE);
@@ -46,7 +47,9 @@ public class GUI extends JFrame{
         JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(inputFilePath, BorderLayout.CENTER);
         inputPanel.add(submitButton, BorderLayout.EAST);
-        inputPanel.add(saveButton, BorderLayout.PAGE_END);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(saveButton, BorderLayout.WEST);
+        inputPanel.add(panel, BorderLayout.PAGE_END);
         inputPanel.add(findFileButton, BorderLayout.WEST);
 
         JPopupMenu menu = new JPopupMenu();
@@ -208,10 +211,10 @@ public class GUI extends JFrame{
                     for (int i = 0; i < fileData.size(); i++) {
                         hexString.append(ConversionsTemp.byteToHex(fileData.get(i))).append(" ");
 
-                        // Prevent string overflow in output text box
+                        /* Prevent string overflow in output text box
                         if ((i + 1) % BYTES_PER_LINE == 0) {
                             hexString.append("\n");
-                        }
+                        }*/
                     }
                     outputArea.setText(hexString.toString());
                 }
