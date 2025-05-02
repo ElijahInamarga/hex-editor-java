@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 public class CommentManager {
     private final JTextPane editor;
     private final List<Comment> comments = new ArrayList<>();
@@ -23,32 +22,6 @@ public class CommentManager {
             public void mouseExited(MouseEvent e) {
                 hidePopup();
             }
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    for (Comment c : comments) {
-                        try {
-                            Position start = c.getStartPos();
-                            Position end = c.getEndPos();
-                            Rectangle rStart = editor.modelToView(start.getOffset());
-                            Rectangle rEnd = editor.modelToView(end.getOffset());
-                            if (rStart != null && rEnd != null) {
-                                Rectangle area = new Rectangle(
-                                        rStart.x, rStart.y,
-                                        rEnd.x - rStart.x, rStart.height
-                                );
-                                if (area.contains(e.getPoint())) {
-                                    int result = JOptionPane.showConfirmDialog(editor, "Delete comment? " + c.getText(), "Delete Comment", JOptionPane.YES_NO_OPTION);
-                                    if (result == JOptionPane.YES_OPTION) {
-                                        removeComment(c);
-                                    }
-                                    return;
-                                }
-                            }
-                        } catch (BadLocationException ignored) {}
-                    }
-                }
-            }
         };
         editor.addMouseMotionListener(mouseAdapter);
         editor.addMouseListener(mouseAdapter);
@@ -60,9 +33,10 @@ public class CommentManager {
             Position startPos = doc.createPosition(start);
             Position endPos = doc.createPosition(end);
             Highlighter hl = editor.getHighlighter();
-            DefaultHighlighter.DefaultHighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 255, 0, 128));
-            Object tag = hl.addHighlight(startPos.getOffset(), endPos.getOffset(), painter);
-            Comment comment = new Comment(startPos, endPos, text, (Highlighter.Highlight) tag);
+            DefaultHighlighter.DefaultHighlightPainter painter =
+                    new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 255, 0, 128));
+            Object tag = hl.addHighlight(start, end, painter);
+            Comment comment = new Comment(startPos, endPos, text, tag);
             comments.add(comment);
             editor.repaint();
         } catch (BadLocationException ex) {
@@ -70,27 +44,42 @@ public class CommentManager {
         }
     }
 
-    private void removeComment(Comment c) {
-        comments.remove(c);
-        editor.getHighlighter().removeHighlight(c.getTag());
+    public void removeComment(Comment comment) {
+        editor.getHighlighter().removeHighlight(comment.getTag());
+        comments.remove(comment);
+        hidePopup();
         editor.repaint();
     }
 
-    public void installIconPainter() {
-        // No-op: clickable area is the commented text range itself.
+    public void updateComment(Comment comment, String newText) {
+        comment.setText(newText);
+        hidePopup();
+    }
+
+    public Comment findCommentAt(int offset) {
+        for (Comment c : comments) {
+            int start = c.getStartPos().getOffset();
+            int end = c.getEndPos().getOffset();
+            if (offset >= start && offset <= end) {
+                return c;
+            }
+        }
+        return null;
     }
 
     private void checkHover(MouseEvent e) {
         for (Comment c : comments) {
             try {
-                Position start = c.getStartPos();
-                Position end = c.getEndPos();
-                Rectangle rStart = editor.modelToView(start.getOffset());
-                Rectangle rEnd = editor.modelToView(end.getOffset());
+                int start = c.getStartPos().getOffset();
+                int end = c.getEndPos().getOffset();
+                Rectangle rStart = editor.modelToView(start);
+                Rectangle rEnd = editor.modelToView(end);
                 if (rStart != null && rEnd != null) {
                     Rectangle area = new Rectangle(
-                            rStart.x, rStart.y,
-                            rEnd.x - rStart.x, rStart.height
+                            rStart.x,
+                            rStart.y,
+                            rEnd.x - rStart.x,
+                            rStart.height
                     );
                     if (area.contains(e.getPoint())) {
                         showPopup(c.getText(), e);
