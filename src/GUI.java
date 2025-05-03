@@ -9,6 +9,9 @@ import java.awt.event.FocusEvent;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
+import javax.swing.text.Document;
+import javax.swing.undo.*;
+
 public class GUI extends JFrame{
     private final int WIDTH = 1065;
     private final int HEIGHT = 900;
@@ -39,6 +42,7 @@ public class GUI extends JFrame{
         setSize(WIDTH, HEIGHT);
         setLayout(new BorderLayout(10,10));
         commentManager = new CommentManager(outputArea);
+        addUndoManager();
 
         JPanel outputPanel = new JPanel(new BorderLayout());
         outputPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -236,4 +240,30 @@ public class GUI extends JFrame{
             }
         }
     };
+
+    private void addUndoManager() {
+        final UndoManager undoMan = new UndoManager();
+        Document doc = outputArea.getDocument();
+        doc.addUndoableEditListener(undoMan);
+        outputArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control Z"), "Undo");
+        outputArea.getActionMap().put("Undo", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (undoMan.canUndo()) {
+                    undoMan.undo();
+                }
+            }
+        });
+
+        outputArea.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("control X"), "Redo");
+        outputArea.getActionMap().put("Redo", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (undoMan.canRedo()) {
+                    undoMan.redo();
+                }
+            }
+        });
+
+    }
+
+
 }
