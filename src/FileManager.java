@@ -94,7 +94,7 @@ public class FileManager {
         this.mainFileData.remove(index);
     }
 
-    // TEMPORARY
+    // Save once
     public void actuallyWriteFileData(byte[] newFileData) throws IOException {
         try {
             FileOutputStream writeFile = new FileOutputStream(this.getFilePath());
