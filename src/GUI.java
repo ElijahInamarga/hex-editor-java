@@ -2,10 +2,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
@@ -24,10 +21,15 @@ public class GUI extends JFrame{
     private JButton submitButton = new JButton("Submit");
     private JButton findFileButton = new JButton("Find File");
     private JButton saveButton = new JButton("Save File");
-    private JTextField inputFilePath = new JTextField("Input file path here...");
+    private JTextField inputFilePath = new JTextField();
     private JTextPane outputArea = new JTextPane();
     private JScrollPane outputScrollPane = new JScrollPane(outputArea);
     private JFileChooser fileChooser = new JFileChooser();
+
+    private boolean isNightMode = false;
+    private JPanel outputPanel;
+    private  JPanel inputPanel;
+    private JPanel subPanel;
 
 
 
@@ -37,23 +39,36 @@ public class GUI extends JFrame{
         outputArea.setEditable(true);
         outputArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         submitButton.addActionListener(ON_SUBMIT);
+        submitButton.setFocusPainted(false);
+        submitButton.setOpaque(true);
+        submitButton.setContentAreaFilled(true);
+        submitButton.setBorderPainted(false);
         findFileButton.addActionListener(ON_FIND_FILE);
+        findFileButton.setBorderPainted(false);
+        findFileButton.setOpaque(true);
+        findFileButton.setFocusPainted(false);
+        findFileButton.setContentAreaFilled(true);
         saveButton.addActionListener(ON_SAVE_FILE);
+        saveButton.setBorderPainted(false);
+        saveButton.setOpaque(true);
+        saveButton.setContentAreaFilled(true);
+        saveButton.setFocusPainted(false);
         setSize(WIDTH, HEIGHT);
         setLayout(new BorderLayout(10,10));
         commentManager = new CommentManager(outputArea);
         addUndoManager();
+        setUpNightMode();
 
-        JPanel outputPanel = new JPanel(new BorderLayout());
+        outputPanel = new JPanel(new BorderLayout());
         outputPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
         outputPanel.add(outputScrollPane, BorderLayout.CENTER);
 
-        JPanel inputPanel = new JPanel(new BorderLayout());
+        inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(inputFilePath, BorderLayout.CENTER);
         inputPanel.add(submitButton, BorderLayout.EAST);
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(saveButton, BorderLayout.WEST);
-        inputPanel.add(panel, BorderLayout.PAGE_END);
+        subPanel = new JPanel(new BorderLayout());
+        subPanel.add(saveButton, BorderLayout.WEST);
+        inputPanel.add(subPanel, BorderLayout.PAGE_END);
         inputPanel.add(findFileButton, BorderLayout.WEST);
 
         JPopupMenu menu = new JPopupMenu();
@@ -260,6 +275,53 @@ public class GUI extends JFrame{
                 if (undoMan.canRedo()) {
                     undoMan.redo();
                 }
+            }
+        });
+
+    }
+    private void toggleNightMode(){
+
+        Color background = isNightMode ? Color.WHITE : Color.DARK_GRAY;
+        Color foreground = isNightMode ? Color.DARK_GRAY : Color.WHITE;
+
+        outputArea.setBackground(background);
+        outputArea.setForeground(foreground);
+        outputArea.setCaretColor(foreground);
+        outputScrollPane.setBackground(background);
+        outputScrollPane.setForeground(foreground);
+
+        inputFilePath.setBackground(background);
+        inputFilePath.setForeground(foreground);
+        inputFilePath.setCaretColor(foreground);
+
+        inputPanel.setBackground(background);
+        outputPanel.setBackground(background);
+        subPanel.setBackground(background);
+
+        submitButton.setBackground(background);
+        submitButton.setForeground(foreground);
+        findFileButton.setBackground(background);
+        findFileButton.setForeground(foreground);
+        saveButton.setBackground(background);
+        saveButton.setForeground(foreground);
+
+        getContentPane().setBackground(background);
+
+        isNightMode = !isNightMode;
+    }
+
+    private void setUpNightMode(){
+        KeyStroke toggleKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_N,
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+
+        JRootPane rootPane = this.getRootPane();
+
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(toggleKeyStroke, "ToggleNightMode");
+
+        rootPane.getActionMap().put("ToggleNightMode", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleNightMode();
             }
         });
 
