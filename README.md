@@ -1,4 +1,4 @@
-To run:
+How to run:
 * Git Clone to a new directory
 * Install `Java Development Kit` if user does not already have
 * Using a CLI, change directory into src then compile the program using `javac Main.java` in the command line
@@ -15,6 +15,9 @@ How to leave comments:
 How to toggle Night/Light mode:
 * Light mode is default
 * Using `ctrl + n` (Windows) or `cmd + n` (Mac) to toggle between Night/Light themes.
+
+How to Undo:
+* For both Mac and Windows, use `ctrl + z`.
 
 How to modify and submit:
 * Users can directly type in the output area
