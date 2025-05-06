@@ -6,7 +6,7 @@ How to run:
 
 How to open a file:
 * Open the file explorer interface by clicking on the `Find File` button located top-left of the screen. You may also copy paste a file location directly onto the text input.
-* Once a file has been designated, click `sumbit`.
+* Once a file has been designated, click `submit`.
 
 How to leave comments:
 * Highlight/select a stream of bytes on the output area that you would like to leave a comment on.
